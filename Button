@@ -1,0 +1,61 @@
+<?php
+
+#AH_BUTTON1
+function AH_BUTTON1_CSS() { ?><style type="text/css">
+	
+	.AH_BUTTON1--link{font-family:Archivo,sans-serif;font-size:16px;font-weight:700;font-stretch:normal;font-style:normal;line-height:1.75;letter-spacing:normal;color:#0077c8;position:relative}
+	.AH_BUTTON1--link:before{content:"";display:block;width:100%;border-bottom:solid 1px #0077c8;position:absolute;bottom:-5px;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-ms-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out}
+	.AH_BUTTON1--link:after{content:"⟶";margin-left:8px;font-size:16px;font-weight:400;font-stretch:normal;font-style:normal;line-height:1.75;letter-spacing:normal;color:#fa163f;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-ms-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;position:absolute;top:50%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-ms-transform:translateY(-50%);-o-transform:translateY(-50%);transform:translateY(-50%)}
+	.AH_BUTTON1--link:hover{color:#fa163f}
+	.AH_BUTTON1--link:hover:before{border-bottom-color:#fa163f}
+	.AH_BUTTON1--link:hover:after{margin-left:16px}
+
+	@media screen and (max-width: 780px) {
+	}
+</style><?php } add_action("wp_head", "AH_BUTTON1_CSS");
+
+function AH_BUTTON1_ARR() { return array(
+	"btn" => "",
+); }
+
+function AH_BUTTON1_SHORTCODE( $atts, $content = null ) { $AH_BUTTON1_ARR = AH_BUTTON1_ARR(); $atts = shortcode_atts( $AH_BUTTON1_ARR, $atts ); ob_start();
+
+	if(!empty($atts["btn"])) {
+		$btn = $atts["btn"];
+		$btn = vc_build_link($btn);
+		if(is_array($btn) && count($btn) > 0) {
+			$url = $btn["url"];
+			$title = $btn["title"];
+			$target = (!empty($btn["target"])) ? $btn["target"] : "_self";
+			$rel = $btn["rel"];
+			echo '<div id="AH_BUTTON1" class="AH_BUTTON1">';
+				echo '<a href="'.$url.'" class="AH_BUTTON1--link" rel="'.$rel.'" target="'.$target.'">';
+					echo $title;
+				echo '</a>';
+			echo '</div>';
+		}
+	}
+
+$OUTPUT = ob_get_contents(); ob_get_clean(); return $OUTPUT; } add_shortcode( 'AH_BUTTON1', 'AH_BUTTON1_SHORTCODE' );
+
+if(class_exists("WPBakeryShortCode")) { # WP Bakery Class Exists
+	class VC_AH_BUTTON1 extends WPBakeryShortCode {
+		function __construct() { add_action( 'init', array( $this, 'vc_vm_home_mapping' ) ); add_shortcode( 'vc_vm_home', array( $this, 'vc_vm_home_html' ) ); } #Element Init
+		public function vc_vm_home_mapping() { if ( !defined( 'WPB_VC_VERSION' ) ) { return; } vc_map( array(
+			'name' => __('Button 1', 'aimhigher'),
+			'base' => 'AH_BUTTON1',
+			'description' => __('Button 1 Shortcode', 'aimhigher'),
+			'category' => __('Aim Higher', 'aimhigher'),
+			'params' => array(
+				array( 'type' => 'vc_link', 'param_name' => 'btn', 'heading' => 'Link', ),
+				/*array( 'type' => 'param_group', 'value' => '', 'param_name' => 'lists', 'params' => array(
+					array( 'type' => 'attach_image', 'param_name' => 'image', 'heading' => __( 'Image', 'vmf' ), ),
+					array( 'type' => 'textarea', 'param_name' => 'testimonial', 'heading' => 'Testimonial', ),
+					array( 'type' => 'textfield', 'param_name' => 'customer', 'heading' => 'Customer', ),
+					array( 'type' => 'textfield', 'param_name' => 'customer_url', 'heading' => 'URL', ),
+				) ),*/
+			)
+		) ); }
+		public function vc_vm_home_html( $atts ) { $AH_BUTTON1_ARR = AH_BUTTON1_ARR(); extract(  shortcode_atts( $AH_BUTTON1_ARR, $atts ) ); $html = do_shortcode("[AH_BUTTON1]"); return $html; } #Fill $html
+	} new VC_AH_BUTTON1(); #Element Class Init
+} # WP Bakery Class Exists
