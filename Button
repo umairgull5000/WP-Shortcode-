@@ -1,61 +1,47 @@
 <?php
 
-#AH_BUTTON1
-function AH_BUTTON1_CSS() { ?><style type="text/css">
-	
-	.AH_BUTTON1--link{font-family:Archivo,sans-serif;font-size:16px;font-weight:700;font-stretch:normal;font-style:normal;line-height:1.75;letter-spacing:normal;color:#0077c8;position:relative}
-	.AH_BUTTON1--link:before{content:"";display:block;width:100%;border-bottom:solid 1px #0077c8;position:absolute;bottom:-5px;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-ms-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out}
-	.AH_BUTTON1--link:after{content:"⟶";margin-left:8px;font-size:16px;font-weight:400;font-stretch:normal;font-style:normal;line-height:1.75;letter-spacing:normal;color:#fa163f;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-ms-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;position:absolute;top:50%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-ms-transform:translateY(-50%);-o-transform:translateY(-50%);transform:translateY(-50%)}
-	.AH_BUTTON1--link:hover{color:#fa163f}
-	.AH_BUTTON1--link:hover:before{border-bottom-color:#fa163f}
-	.AH_BUTTON1--link:hover:after{margin-left:16px}
+#VM_BUTTON_CSS
+function VM_BUTTON_CSS() { ?><style type="text/css">
+	.txtcenter{text-align:center}
+	.txtright{text-align:right}
+</style><?php } add_action ("wp_head", "VM_BUTTON_CSS");
 
-	@media screen and (max-width: 780px) {
-	}
-</style><?php } add_action("wp_head", "AH_BUTTON1_CSS");
-
-function AH_BUTTON1_ARR() { return array(
-	"btn" => "",
+#VM_BUTTON_ARR
+function VM_BUTTON_ARR() { return array(
+	"href" => "#",
+	"target" => "_self",
+	"text" => "VIEW MORE",
+	"align" => "",
+	"w-btn" => "400px",
+	"c-btn" => "bg-clr1 clrw",
+	"animation" => "",
 ); }
 
-function AH_BUTTON1_SHORTCODE( $atts, $content = null ) { $AH_BUTTON1_ARR = AH_BUTTON1_ARR(); $atts = shortcode_atts( $AH_BUTTON1_ARR, $atts ); ob_start();
-
-	if(!empty($atts["btn"])) {
-		$btn = $atts["btn"];
-		$btn = vc_build_link($btn);
-		if(is_array($btn) && count($btn) > 0) {
-			$url = $btn["url"];
-			$title = $btn["title"];
-			$target = (!empty($btn["target"])) ? $btn["target"] : "_self";
-			$rel = $btn["rel"];
-			echo '<div id="AH_BUTTON1" class="AH_BUTTON1">';
-				echo '<a href="'.$url.'" class="AH_BUTTON1--link" rel="'.$rel.'" target="'.$target.'">';
-					echo $title;
-				echo '</a>';
-			echo '</div>';
-		}
-	}
-
-$OUTPUT = ob_get_contents(); ob_get_clean(); return $OUTPUT; } add_shortcode( 'AH_BUTTON1', 'AH_BUTTON1_SHORTCODE' );
+function VM_BUTTON_SHORTCODE( $atts ) { $VM_BUTTON_ARR = VM_BUTTON_ARR(); $atts = shortcode_atts( $VM_BUTTON_ARR, $atts ); $href = vc_build_link($atts["href"]); ob_start(); ?>
+	<div class="<?php echo $atts["align"]; ?> <?php if(!empty($atts["animation"])) { echo "wpb_animate_when_almost_visible wpb_".$atts["animation"]." ".$atts["animation"]; } ?>"><a class="vm-button vm-inline-block txtcenter pad-small <?php echo $atts["c-btn"]; ?>" style="max-width:<?php echo $atts["w-btn"]; ?>; width:100%;" href="<?php echo $href["url"]; ?>" target="<?php echo $atts["target"]; ?>"><?php echo $atts["text"]; ?></a></div>
+<?php $OUTPUT = ob_get_contents(); ob_get_clean(); return $OUTPUT; } add_shortcode( 'VM_BUTTON', 'VM_BUTTON_SHORTCODE' );
 
 if(class_exists("WPBakeryShortCode")) { # WP Bakery Class Exists
-	class VC_AH_BUTTON1 extends WPBakeryShortCode {
-		function __construct() { add_action( 'init', array( $this, 'vc_vm_home_mapping' ) ); add_shortcode( 'vc_vm_home', array( $this, 'vc_vm_home_html' ) ); } #Element Init
-		public function vc_vm_home_mapping() { if ( !defined( 'WPB_VC_VERSION' ) ) { return; } vc_map( array(
-			'name' => __('Button 1', 'aimhigher'),
-			'base' => 'AH_BUTTON1',
-			'description' => __('Button 1 Shortcode', 'aimhigher'),
-			'category' => __('Aim Higher', 'aimhigher'),
-			'params' => array(
-				array( 'type' => 'vc_link', 'param_name' => 'btn', 'heading' => 'Link', ),
-				/*array( 'type' => 'param_group', 'value' => '', 'param_name' => 'lists', 'params' => array(
-					array( 'type' => 'attach_image', 'param_name' => 'image', 'heading' => __( 'Image', 'vmf' ), ),
-					array( 'type' => 'textarea', 'param_name' => 'testimonial', 'heading' => 'Testimonial', ),
-					array( 'type' => 'textfield', 'param_name' => 'customer', 'heading' => 'Customer', ),
-					array( 'type' => 'textfield', 'param_name' => 'customer_url', 'heading' => 'URL', ),
-				) ),*/
-			)
-		) ); }
-		public function vc_vm_home_html( $atts ) { $AH_BUTTON1_ARR = AH_BUTTON1_ARR(); extract(  shortcode_atts( $AH_BUTTON1_ARR, $atts ) ); $html = do_shortcode("[AH_BUTTON1]"); return $html; } #Fill $html
-	} new VC_AH_BUTTON1(); #Element Class Init
+    class VC_VM_BUTTON extends WPBakeryShortCode { #Element Class
+        function __construct() { add_action( 'init', array( $this, 'vc_vm_home_mapping' ) ); add_shortcode( 'vc_vm_home', array( $this, 'vc_vm_home_html' ) ); } #Element Init
+        public function vc_vm_home_mapping() { #Element Mapping
+            if ( !defined( 'WPB_VC_VERSION' ) ) { return; } #Stop all if VC is not enabled
+            vc_map( #Map the block with vc_map()
+                array(
+                    'name' => __('VM BUTTON', 'vmf'),
+                    'base' => 'VM_BUTTON',
+                    'description' => __('VM BUTTON SHORTCODE', 'vmf'),
+                    'category' => __('Ventix Media', 'vmf'),
+                    'params' => array(
+                        array( 'type' => 'textfield', 'param_name' => 'text', 'heading' => __( 'Title', 'vmf' ), ),
+                        array( 'type' => 'vc_link', 'param_name' => 'href', 'heading' => __( 'Sub Title', 'vmf' ), ),
+                        array( 'type' => 'dropdown', 'param_name' => 'target', 'heading' => __('Link Opening'), 'value' => array('Current' => '_self', 'New Window' => '_blank'), ),
+                        array( 'type' => 'dropdown', 'param_name' => 'align', 'heading' => __('Alignment'), 'value' => array('Left' => 'txtleft', 'Right' => 'txtright', 'Center' => 'txtcenter'), ),
+                        array( 'type' => 'textfield', 'param_name' => 'w-btn', 'heading' => __( 'Width', 'vmf' ), ),
+                        array( 'type' => 'textfield', 'param_name' => 'c-btn', 'heading' => __( 'Class', 'vmf' ), ),
+                        array( 'type' => 'animation_style', 'param_name' => 'animation', 'heading' => __( 'Animation Style', 'vmf' ), 'description' => __( 'Choose your animation style', 'vmf' ), ),
+            ) ) );
+        }
+        public function vc_vm_home_html( $atts ) { $VM_BUTTON_TITLE_ARR = VM_BUTTON_TITLE_ARR(); extract(  shortcode_atts( $VM_BUTTON_TITLE_ARR, $atts ) ); $html = do_shortcode("[VM_BUTTON_TITLE]"); return $html; } #Fill $html
+    } new VC_VM_BUTTON(); #Element Class Init
 } # WP Bakery Class Exists
